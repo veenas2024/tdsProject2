@@ -5,7 +5,7 @@
 #   "numpy",
 #   "matplotlib",
 #   "seaborn",
-#   "openai",
+#   "openai==0.28.0",
 #   "scikit-learn",
 #   "python-dotenv",
 # ]
@@ -153,7 +153,9 @@ def call_chatgpt(summary_stats, correlation_matrix, numeric_df, mse, r2, coeffic
 
     Provide insights based on the analysis and narrate a story summarizing key findings.
     """
+    
     # Make a ChatCompletion request
+    print("openiai version",openai.__version__)
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
@@ -162,13 +164,19 @@ def call_chatgpt(summary_stats, correlation_matrix, numeric_df, mse, r2, coeffic
             {"role": "user", "content": prompt}
             ]
         )
+       # print("autolysis:chatGptApiCall:respone",response['choices'][0]['message']['content'])
         return response['choices'][0]['message']['content'] 
     except openai.error.AuthenticationError as e:
-        print("Authentication failed:", str(e))
+        print("autolysis:chatGptApiCall Authentication failed:", str(e))
+        sys.exit(1)
+    except openai.error.InvalidRequestError as e:
+        print("autolysis:chatGptApiCallInvalid request:", str(e))
         sys.exit(1)
     except openai.error.OpenAIError as e:
-        print("OpenAI API error:", str(e))
+        print("autolysis:chatGptApiCall: OpenAI API error:", str(e))
         sys.exit(1)
+    except Exception as e:
+        print("utolysis:chatGptApiCall:openi api call :general error",str(e))
     print("autolysis:chatGptApiCall completed")
 
 def write_readme(chatgpt_response):
@@ -222,3 +230,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
