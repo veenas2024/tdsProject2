@@ -1,9 +1,6 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#   "os",
-#   "argparse",
-#   "sys",
 #   "pandas>=2.2.3",
 #   "numpy",
 #   "matplotlib",
